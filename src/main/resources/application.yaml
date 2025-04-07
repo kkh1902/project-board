@@ -8,11 +8,14 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 spring:
-  application.name: project-board
+#  application.name: project-board
   datasource:
-    url: jdbc:mysql://localhost:3307/project-board
-    username: root
-    password: 1234
+#    url: jdbc:mysql://localhost:3307/project-board
+#    username: root
+#    password: 1234
+    url: jdbc:h2:mem:testdb
+    username : sa
+    dirver-class-name : org.h2.Driver
   jpa:
     open-in-view: false
     defer-datasource-initialization: true
