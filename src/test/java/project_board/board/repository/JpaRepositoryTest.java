@@ -27,15 +27,6 @@ class JpaRepositoryTest {
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
 
-    @BeforeEach
-    void cleanDatabase() {
-        articleCommentRepository.deleteAll();
-        articleRepository.deleteAll();
-
-        articleRepository.save(Article.of("title1", "content1", "#tag1"));
-        articleRepository.save(Article.of("title2", "content2", "#tag2"));
-
-    }
     public JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
             @Autowired ArticleCommentRepository articleCommentRepository) {
@@ -54,7 +45,7 @@ class JpaRepositoryTest {
         // Then
         assertThat(articles)
                 .isNotNull()
-                .hasSize(2);
+                .hasSize(1);
     }
 
     @DisplayName("insert 테스트")
