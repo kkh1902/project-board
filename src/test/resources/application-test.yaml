@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:board;MODE=MYSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop   # 테스트 끝나면 테이블 다 삭제
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      mode: never   # 테스트할 때 test/resources/data.sql 자동 실행
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace

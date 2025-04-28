@@ -1,5 +1,7 @@
 package project_board.board.repository;
 
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,25 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("JPA 연결 테스트")
 @ActiveProfiles("test")
-@TestPropertySource(properties = "spring.test.database.replace=none")
+@DisplayName("JPA 연결 테스트")
 @Import(JpaConfig.class)
 @DataJpaTest
+@Transactional
 class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
 
+    @BeforeEach
+    void cleanDatabase() {
+        articleCommentRepository.deleteAll();
+        articleRepository.deleteAll();
+
+        articleRepository.save(Article.of("title1", "content1", "#tag1"));
+        articleRepository.save(Article.of("title2", "content2", "#tag2"));
+
+    }
     public JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
             @Autowired ArticleCommentRepository articleCommentRepository) {
@@ -43,7 +54,7 @@ class JpaRepositoryTest {
         // Then
         assertThat(articles)
                 .isNotNull()
-                .hasSize(10);
+                .hasSize(2);
     }
 
     @DisplayName("insert 테스트")
@@ -63,7 +74,7 @@ class JpaRepositoryTest {
     @Test
     void givenTestData_whenUpdating_theWorksFine(){
         // Given
-        Article article = articleRepository.findById(2L).orElseThrow();
+        Article article = articleRepository.findById(1L).orElseThrow();
         String updatedHashtag = "#springboot";
         article.setContent(updatedHashtag);
 
@@ -79,7 +90,7 @@ class JpaRepositoryTest {
     @Test
     void givenTestData_whenDeleting_theWorksFine(){
         // Given
-        Article article = articleRepository.findById(2L).orElseThrow();
+        Article article = articleRepository.findById(1L).orElseThrow();
         long previousArticleCount = articleRepository.count();
         long previousArticleCommentCount = articleCommentRepository.count();
         long deletedCommentSize = article.getArticleComments().size();
